@@ -19,6 +19,10 @@
         <td>{{member?.jobTitle}}</td>
         <td>{{member?.team}}</td>
         <td>{{member?.status}}</td>
+        <td><button class="btn btn-primary" (click)="goToMemberByID(member?.id, 'view-member-detail')">View</button>
+        </td>
+        <td><button class="btn btn-primary" (click)="goToMemberByID(member?.id, 'member-detail')">Edit</button></td>
+        <td><button class="btn btn-danger" (click)="deleteMemberById(member?.id)">Delete</button></td>
       </tr>
     </tbody>
   </table>

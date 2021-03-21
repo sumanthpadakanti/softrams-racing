@@ -2,38 +2,26 @@
   <h3 class="text-center lead">Add Member to Racing Team</h3>
   <br />
   <!--Template Driven Form or Model Driven Form?-->
-  <form (ngSubmit)="onSubmit(memberForm)">
+  <form (ngSubmit)="onSubmit()" [formGroup]="memberForm">
     <div>
       <div class="row">
         <div class="col-md-6">
-          <input
-            type="text"
-            class="form-control"
-            id="firstName"
-            placeholder="First Name"
-          />
+          <input type="text" class="form-control" formControlName="firstName" id="firstName" [readonly]="viewMemberId"
+            placeholder="First Name" />
         </div>
         <div class="col-md-6">
-          <input
-            type="text"
-            class="form-control"
-            id="lastName"
-            placeholder="Last Name"
-          />
+          <input type="text" class="form-control" formControlName="lastName" id="lastName" [readonly]="viewMemberId"
+            placeholder="Last Name" />
         </div>
       </div>
       <br />
       <div class="row">
         <div class="col-md-6">
-          <input
-            type="text"
-            class="form-control"
-            id="jobTitle"
-            placeholder="Job Title"
-          />
+          <input type="text" class="form-control" formControlName="jobTitle" id="jobTitle" [readonly]="viewMemberId"
+            placeholder="Job Title" />
         </div>
-        <!--We may have to make a service call to get this list-->
-        <select id="team" class="col-md-6 custom-select">
+        <select id="team" class="col-md-6 custom-select" formControlName="team">
+          <option value="">Select Team</option>
           <option *ngFor="let team of teams">{{ team.teamName }}</option>
         </select>
       </div>
@@ -41,17 +29,22 @@
       <div class="form-group col-md-6">
         <div class="row">
           <label id="activeStatus" class="md-check lead">
-            <input type="radio" value="Active" name="status" /> Active
+            <input type="radio" value="Active" name="status" [readonly]="viewMemberId" formControlName="status" />
+            Active
           </label>
           <label class="md-check lead">
-            <input type="radio" value="Inactive" name="status" /> Inactive
+            <input type="radio" value="Inactive" name="status" [readonly]="viewMemberId" formControlName="status" />
+            Inactive
           </label>
         </div>
       </div>
     </div>
     <!--Disable if form is invalid-->
-    <button type="submit" class="btn btn-primary pull-right">
-      Save Member
+    <button type="submit" class="btn btn-primary pull-right" [disabled]="!memberForm.valid" *ngIf="!viewMemberId">
+      {{editMemberId ? 'Update Member' : 'Save Member'}}
+    </button>
+    <button class="btn btn-primary pull-right" *ngIf="viewMemberId" (click)="backToSummary()">
+      Back to Summary
     </button>
   </form>
 </div>

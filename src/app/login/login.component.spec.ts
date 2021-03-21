@@ -1,17 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { LoginComponent } from './login.component';
-
-import { HttpClient } from '@angular/common/http';
-
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AppService } from '../app.service';
+import { of } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  const router = {
+    navigate: jasmine.createSpy('navigate')
+  }
+  const fakeAppService =  {
+    setUsername: () => of([])
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,10 +22,12 @@ describe('LoginComponent', () => {
       imports: [ReactiveFormsModule, RouterModule, HttpClientModule],
       providers: [
         {
+          provide: AppService,
+          useValue: fakeAppService
+        },
+        {
           provide: Router,
-          useClass: class {
-            navigate = jasmine.createSpy('navigate');
-          }
+          useValue: router
         },
         HttpClient
       ]
@@ -38,4 +43,11 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should call login', () => {
+    spyOn(component, 'login').and.callThrough();
+    component.login();
+    expect(router.navigate).toHaveBeenCalledWith(['/members']);
+  });
+
 });
